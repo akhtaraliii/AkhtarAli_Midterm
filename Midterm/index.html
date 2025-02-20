@@ -174,8 +174,33 @@
         };
     });
 
+
+    // Get teams by city functionality
+    document.getElementById('getTeamsByCity').addEventListener('click', async () => {
+        // Show city input, hide team ID input
+        teamIdInput.style.display = 'none';
+        cityInput.style.display = 'inline';
+        
+        cityInput.onchange = async () => {
+            try {
+                // Validate input
+                const city = cityInput.value;
+                if (!city) throw new Error('Please enter a city name');
+                
+                // Fetch teams by city
+                const response = await fetch(`${baseUrl}/teams/city/${city}`);
+                if (!response.ok) throw new Error('No teams found for this city');
+                
+                // Display results
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                handleError(error);
+            }
+        };
     });
 
+});
 </script>
 </body>
 </html>
