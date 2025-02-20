@@ -62,8 +62,74 @@
   <h2>Results:</h2>
   <pre id="results"></pre>
   <script>
-    // Students need to implement the JavaScript code here
-    // This includes fetching data from the REST API and handling the responses.
-  </script>
+    const baseUrl = 'http://localhost:3000';
+    const resultsElement = document.getElementById('results');
+    const teamIdInput = document.getElementById('teamIdInput');
+    const cityInput = document.getElementById('cityInput');
+
+    // Helper function to display results
+    function displayResults(data) {
+        resultsElement.textContent = JSON.stringify(data, null, 2);
+    }
+
+    // Helper function to handle errors
+    function handleError(error) {
+        resultsElement.textContent = `Error: ${error.message}`;
+    }
+
+    // Get all teams
+    document.getElementById('getAllTeams').addEventListener('click', async () => {
+        teamIdInput.style.display = 'none';
+        cityInput.style.display = 'none';
+        try {
+            const response = await fetch(`${baseUrl}/teams`);
+            if (!response.ok) throw new Error('Failed to fetch teams');
+            const data = await response.json();
+            displayResults(data);
+        } catch (error) {
+            handleError(error);
+        }
+    });
+
+    // Get team by ID
+    document.getElementById('getTeamById').addEventListener('click', async () => {
+        teamIdInput.style.display = 'inline';
+        cityInput.style.display = 'none';
+        
+        teamIdInput.onchange = async () => {
+            try {
+                const teamId = teamIdInput.value;
+                if (!teamId) throw new Error('Please enter a team ID');
+                
+                const response = await fetch(`${baseUrl}/teams/${teamId}`);
+                if (!response.ok) throw new Error('Team not found');
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                handleError(error);
+            }
+        };
+    });
+
+    // Get teams by city
+    document.getElementById('getTeamsByCity').addEventListener('click', async () => {
+        teamIdInput.style.display = 'none';
+        cityInput.style.display = 'inline';
+        
+        cityInput.onchange = async () => {
+            try {
+                const city = cityInput.value;
+                if (!city) throw new Error('Please enter a city name');
+                
+                const response = await fetch(`${baseUrl}/teams/city/${city}`);
+                if (!response.ok) throw new Error('No teams found for this city');
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                handleError(error);
+            }
+        };
+    });
+</script>
 </body>
 </html>
