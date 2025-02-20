@@ -130,6 +130,26 @@
             }
         };
     });
+
+    // Get all teams functionality
+    document.getElementById('getAllTeams').addEventListener('click', async () => {
+        // Hide input fields
+        teamIdInput.style.display = 'none';
+        cityInput.style.display = 'none';
+        
+        try {
+            // Fetch all teams
+            const response = await fetch(`${baseUrl}/teams`);
+            if (!response.ok) throw new Error('Failed to fetch teams');
+            
+            // Display results
+            const data = await response.json();
+            displayResults(data);
+        } catch (error) {
+            handleError(error);
+        }
+    });
+    
 </script>
 </body>
 </html>
