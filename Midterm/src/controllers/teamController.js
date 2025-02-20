@@ -28,3 +28,21 @@ exports.getTeamById = async (req, res) => {
         });
     }
 };
+
+// Get teams by city
+exports.getTeamsByCity = async (req, res) => {
+    try {
+        const teams = await Team.find({ 
+            city: { $regex: new RegExp(req.params.city, 'i') }
+        });
+        if (teams.length === 0) {
+            return res.status(404).json({ message: 'No teams found in this city' });
+        }
+        res.json(teams);
+    } catch (error) {
+        res.status(500).json({ 
+            message: 'Error fetching teams by city',
+            error: error.message 
+        });
+    }
+};
