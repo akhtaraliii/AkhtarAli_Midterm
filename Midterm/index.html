@@ -1,206 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sports Teams API</title>
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f5f5f5;
-    }
-    h1 {
-        color: #333;
-        text-align: center;
-    }
-    .button-container {
-        display: flex;
-        gap: 10px;
-        margin: 20px 0;
-        justify-content: center;
-    }
-    button {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    button:hover {
-        background-color: #0056b3;
-    }
-    #results {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akhtar Ali Sports Teams API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results {
             background-color: white;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             white-space: pre-wrap;
         }
-    .input-container {
+        .input-container {
             margin: 20px 0;
             text-align: center;
         }
-    input {
+        input {
             padding: 8px;
             margin: 0 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-</style>
+    </style>
 </head>
 <body>
-  <h1>Sports Teams API</h1>
-  <p>Use the buttons below to fetch data from the sports teams API:</p>
-  <button id="getAllTeams">Get All Teams</button>
-  <button id="getTeamById">Get Team By ID</button>
-  <button id="getTeamsByCity">Get Teams By City</button>
-  <h2>Results:</h2>
-  <pre id="results"></pre>
-  <script>
-    const baseUrl = 'http://localhost:3000';
-    const resultsElement = document.getElementById('results');
-    const teamIdInput = document.getElementById('teamIdInput');
-    const cityInput = document.getElementById('cityInput');
+    <h1>Sports Teams API</h1>
+    <p style="text-align: center;">Use the buttons below to fetch data from the sports teams API:</p>
+    
+    <div class="button-container">
+        <button id="getAllTeams">Get All Teams</button>
+        <button id="getTeamById">Get Team By ID</button>
+        <button id="getTeamsByCity">Get Teams By City</button>
+    </div>
 
-    // Helper function to display results
-    function displayResults(data) {
-        resultsElement.textContent = JSON.stringify(data, null, 2);
-    }
+    <div class="input-container">
+        <input type="number" id="teamIdInput" placeholder="Enter Team ID" style="display: none;">
+        <input type="text" id="cityInput" placeholder="Enter City Name" style="display: none;">
+    </div>
 
-    // Helper function to handle errors
-    function handleError(error) {
-        resultsElement.textContent = `Error: ${error.message}`;
-    }
+    <h2>Results:</h2>
+    <pre id="results">Results will appear here...</pre>
 
-    // Get all teams
-    document.getElementById('getAllTeams').addEventListener('click', async () => {
-        teamIdInput.style.display = 'none';
-        cityInput.style.display = 'none';
-        try {
-            const response = await fetch(`${baseUrl}/teams`);
-            if (!response.ok) throw new Error('Failed to fetch teams');
-            const data = await response.json();
-            displayResults(data);
-        } catch (error) {
-            handleError(error);
+    <script>
+        const baseUrl = 'http://localhost:3000';
+        const resultsElement = document.getElementById('results');
+        const teamIdInput = document.getElementById('teamIdInput');
+        const cityInput = document.getElementById('cityInput');
+
+        // Helper function to display results
+        function displayResults(data) {
+            resultsElement.textContent = JSON.stringify(data, null, 2);
         }
-    });
 
-    // Get team by ID
-    document.getElementById('getTeamById').addEventListener('click', async () => {
-        teamIdInput.style.display = 'inline';
-        cityInput.style.display = 'none';
-        
-        teamIdInput.onchange = async () => {
+        // Helper function to handle errors
+        function handleError(error) {
+            resultsElement.textContent = `Error: ${error.message}`;
+        }
+
+        // Get all teams
+        document.getElementById('getAllTeams').addEventListener('click', async () => {
+            teamIdInput.style.display = 'none';
+            cityInput.style.display = 'none';
             try {
-                const teamId = teamIdInput.value;
-                if (!teamId) throw new Error('Please enter a team ID');
-                
-                const response = await fetch(`${baseUrl}/teams/${teamId}`);
-                if (!response.ok) throw new Error('Team not found');
+                const response = await fetch(`${baseUrl}/teams`);
+                if (!response.ok) throw new Error('Failed to fetch teams');
                 const data = await response.json();
                 displayResults(data);
             } catch (error) {
                 handleError(error);
             }
-        };
-    });
+        });
 
-    // Get teams by city
-    document.getElementById('getTeamsByCity').addEventListener('click', async () => {
-        teamIdInput.style.display = 'none';
-        cityInput.style.display = 'inline';
-        
-        cityInput.onchange = async () => {
-            try {
-                const city = cityInput.value;
-                if (!city) throw new Error('Please enter a city name');
-                
-                const response = await fetch(`${baseUrl}/teams/city/${city}`);
-                if (!response.ok) throw new Error('No teams found for this city');
-                const data = await response.json();
-                displayResults(data);
-            } catch (error) {
-                handleError(error);
-            }
-        };
-    });
-
-    // Get all teams functionality
-    document.getElementById('getAllTeams').addEventListener('click', async () => {
-        // Hide input fields
-        teamIdInput.style.display = 'none';
-        cityInput.style.display = 'none';
-        
-        try {
-            // Fetch all teams
-            const response = await fetch(`${baseUrl}/teams`);
-            if (!response.ok) throw new Error('Failed to fetch teams');
+        // Get team by ID
+        document.getElementById('getTeamById').addEventListener('click', async () => {
+            teamIdInput.style.display = 'inline';
+            cityInput.style.display = 'none';
             
-            // Display results
-            const data = await response.json();
-            displayResults(data);
-        } catch (error) {
-            handleError(error);
-     }
-
-    // Get team by ID functionality
-    document.getElementById('getTeamById').addEventListener('click', async () => {
-    // Show team ID input, hide city input
-    teamIdInput.style.display = 'inline';
-    cityInput.style.display = 'none';
-        
-    teamIdInput.onchange = async () => {
-            try {
-                // Validate input
-                 const teamId = teamIdInput.value;
-                 if (!teamId) throw new Error('Please enter a team ID');
-                
-                // Fetch team by ID
-                const response = await fetch(`${baseUrl}/teams/${teamId}`);
-                if (!response.ok) throw new Error('Team not found');
-                
-                // Display results
-                const data = await response.json();
-                displayResults(data);
+            teamIdInput.onchange = async () => {
+                try {
+                    const teamId = teamIdInput.value;
+                    if (!teamId) throw new Error('Please enter a team ID');
+                    
+                    const response = await fetch(`${baseUrl}/teams/${teamId}`);
+                    if (!response.ok) throw new Error('Team not found');
+                    const data = await response.json();
+                    displayResults(data);
                 } catch (error) {
-                handleError(error);
-            }
-        };
-    });
+                    handleError(error);
+                }
+            };
+        });
 
-
-    // Get teams by city functionality
-    document.getElementById('getTeamsByCity').addEventListener('click', async () => {
-        // Show city input, hide team ID input
-        teamIdInput.style.display = 'none';
-        cityInput.style.display = 'inline';
-        
-        cityInput.onchange = async () => {
-            try {
-                // Validate input
-                const city = cityInput.value;
-                if (!city) throw new Error('Please enter a city name');
-                
-                // Fetch teams by city
-                const response = await fetch(`${baseUrl}/teams/city/${city}`);
-                if (!response.ok) throw new Error('No teams found for this city');
-                
-                // Display results
-                const data = await response.json();
-                displayResults(data);
-            } catch (error) {
-                handleError(error);
-            }
-        };
-    });
-
-});
-</script>
+        // Get teams by city
+        document.getElementById('getTeamsByCity').addEventListener('click', async () => {
+            teamIdInput.style.display = 'none';
+            cityInput.style.display = 'inline';
+            
+            cityInput.onchange = async () => {
+                try {
+                    const city = cityInput.value;
+                    if (!city) throw new Error('Please enter a city name');
+                    
+                    const response = await fetch(`${baseUrl}/teams/city/${city}`);
+                    if (!response.ok) throw new Error('No teams found for this city');
+                    const data = await response.json();
+                    displayResults(data);
+                } catch (error) {
+                    handleError(error);
+                }
+            };
+        });
+    </script>
 </body>
 </html>
