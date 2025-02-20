@@ -1,0 +1,20 @@
+{
+  "name": "midterm",
+  "version": "1.0.0",
+  "description": "This is the Teams folder that will help user to fetch user to get all the teams which are saved in teams.json file",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akhtaraliii/AkhtarAli_Midterm.git"
+  },
+  "author": "Akhtar Ali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akhtaraliii/AkhtarAli_Midterm/issues"
+  },
+  "homepage": "https://github.com/akhtaraliii/AkhtarAli_Midterm#readme"
+}
