@@ -147,9 +147,35 @@
             displayResults(data);
         } catch (error) {
             handleError(error);
-        }
+     }
+
+    // Get team by ID functionality
+    document.getElementById('getTeamById').addEventListener('click', async () => {
+    // Show team ID input, hide city input
+    teamIdInput.style.display = 'inline';
+    cityInput.style.display = 'none';
+        
+    teamIdInput.onchange = async () => {
+            try {
+                // Validate input
+                 const teamId = teamIdInput.value;
+                 if (!teamId) throw new Error('Please enter a team ID');
+                
+                // Fetch team by ID
+                const response = await fetch(`${baseUrl}/teams/${teamId}`);
+                if (!response.ok) throw new Error('Team not found');
+                
+                // Display results
+                const data = await response.json();
+                displayResults(data);
+                } catch (error) {
+                handleError(error);
+            }
+        };
     });
-    
+
+    });
+
 </script>
 </body>
 </html>
